@@ -19,6 +19,7 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Parameters;
 
+import com.qa.pages.LoginPages;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 
@@ -28,6 +29,7 @@ public class TestBase {
 	Actions act;
 	FileInputStream fileLoc;
 	Properties prop;
+	LoginPages LoginOR;
 	
 	@Parameters({"Browser","Url"})
 	@BeforeClass
@@ -61,14 +63,17 @@ public class TestBase {
 			WebDriverManager.edgedriver().setup();
 			driver = new EdgeDriver();	
 		}
-		
-		driver.manage().timeouts().implicitlyWait(40, TimeUnit.SECONDS);			
+		LoginOR = new LoginPages(driver);		
+		driver.manage().timeouts().implicitlyWait(40, TimeUnit.SECONDS);		
 		
 		act = new Actions(driver);
 		driver.get(Url);
 		driver.manage().window().maximize();
 		driver.manage().timeouts().pageLoadTimeout(10000, TimeUnit.SECONDS);
 		
+		LoginOR.getUnamTxtField().sendKeys(prop.getProperty("Uname"));
+		LoginOR.getPwdTxtField().sendKeys(prop.getProperty("Pwd"));
+		LoginOR.getLoginBtn().click();
 		
 	}
 	
